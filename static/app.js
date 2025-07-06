@@ -241,6 +241,7 @@ function nextTrial() {
 }
 
 function _afterLevelUpNextTrial() {
+    trialNum += 1;
     if (trialNum >= TRIALS) {
         endExperiment();
         return;
@@ -255,7 +256,7 @@ function _afterLevelUpNextTrial() {
         timer = null;
     }
     enableDecks(true);
-    trialNum += 1;
+    
     updateLabels();
 }
 
