@@ -6,7 +6,7 @@ const BLOCK_SIZE = 20;
 const REWARDS = { "A": 100, "B": 100, "C": 50, "D": 50 };
 const PENALTIES = { "A": 250, "B": 250, "C": 50, "D": 50 };
 
-let bankLabel, blockLabel, trialLabel, blockProgress, feedbackLabel, infoLabel, finishBtn;
+let bankLabel, blockLabel, trialLabel, blockProgress, feedbackLabel, infoLabel, finishBtn, downloadBtn;
 let trialNum = 0;
 let bank = 2000;
 let data = [];
@@ -31,6 +31,7 @@ window.onload = function() {
     feedbackLabel = document.getElementById('feedback');
     infoLabel = document.getElementById('info');
     finishBtn = document.getElementById('finish');
+    downloadBtn = document.getElementById('download-csv');
 
     // Demographics section handling
     const demogSection = document.getElementById('demographics-section');
@@ -59,21 +60,34 @@ window.onload = function() {
         }
     });
 
-    // Finish handler
-    finishBtn.onclick = function() {
-        fetch('/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ results: data, demographics })
-        })
-        .then(r => r.json())
-        .then(resp => {
-            alert("Submitted! Thank you. Result file: " + resp.file);
-        });
+    // Hide finish button, only show Download CSV on completion
+    finishBtn.style.display = "none";
+    downloadBtn.style.display = "none";
+
+    // Download CSV handler
+    downloadBtn.onclick = function() {
+        // Attach demographics to each row
+        const combinedData = data.map(row => ({
+            ...row,
+            name: demographics.name,
+            age: demographics.age,
+            gender: demographics.gender
+        }));
+        const csv = arrayToCSV(combinedData);
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "igt_results.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     };
 };
 
-// --- The rest of your functions below (unchanged) ---
+// --- The rest of your functions below (unchanged except endExperiment) ---
 
 function init() {
     timePressureTrials = Array.from({length: TRIALS}, (_, i) => i);
@@ -240,7 +254,16 @@ function _afterLevelUpNextTrial() {
 
 function endExperiment() {
     enableDecks(false);
-    infoLabel.innerHTML = "<b>Game Over!</b><br>Results saved to CSV file.<br>Developed by Shreyas Sinha | <a href='https://www.linkedin.com/in/shreyas-sinha-appcair' target='_blank'>LinkedIn</a>";
+    infoLabel.innerHTML = "<b>Game Over!</b><br>You can now download your results.<br>Developed by Shreyas Sinha | <a href='https://www.linkedin.com/in/shreyas-sinha-appcair' target='_blank'>LinkedIn</a>";
     feedbackLabel.innerHTML = `Final Bank: ₹${bank}<br>Switches: ${switchCount}, Loss-based Switches: ${lossBasedSwitchCount}, Return-to-Prev: ${returnToPrevCount}`;
-    finishBtn.style.display = "block";
+    finishBtn.style.display = "none";
+    downloadBtn.style.display = "block";
+}
+
+// --- CSV Helper ---
+function arrayToCSV(data) {
+    if (data.length === 0) return "";
+    const header = Object.keys(data[0]).join(",");
+    const rows = data.map(row => Object.values(row).map(val => `"${val}"`).join(","));
+    return [header, ...rows].join("\r\n");
 }
