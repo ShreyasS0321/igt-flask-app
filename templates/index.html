@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Iowa Gambling Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="igt-container">
+        <header>
+            <h1>Iowa Gambling Task</h1>
+            <div class="subtitle">Modern Web Version</div>
+        </header>
+        <section id="demographics-section" class="card">
+            <h2>Participant Details</h2>
+            <div class="demog-form">
+                <input id="demog-name" type="text" placeholder="Name or Initials">
+                <input id="demog-age" type="number" min="1" max="120" placeholder="Age">
+                <select id="demog-gender">
+                    <option value="">Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+                <button id="demog-start" class="primary-btn">Start Experiment</button>
+            </div>
+        </section>
+        <main id="igt-main" style="display:none;">
+            <div class="info-bar">
+                <div id="info">Instructions will appear here</div>
+                <div class="stats">
+                    <span>Bank: ₹<span id="bank">2000</span></span>
+                    <span>| Block: <span id="block">1/5</span></span>
+                    <span>| Trial: <span id="trial">1/20</span></span>
+                </div>
+                <progress id="block-progress" value="1" max="20"></progress>
+            </div>
+            <div class="deck-row">
+                <button class="deck-btn" id="deck-A">Deck A</button>
+                <button class="deck-btn" id="deck-B">Deck B</button>
+                <button class="deck-btn" id="deck-C">Deck C</button>
+                <button class="deck-btn" id="deck-D">Deck D</button>
+            </div>
+            <div id="feedback" class="feedback"></div>
+            <button id="finish" class="primary-btn" style="display:none;">Finish & Submit</button>
+        </main>
+        <footer>
+            <div class="dev-credit">
+                Developed by <b>Shreyas Sinha</b> | 
+                <a href="https://www.linkedin.com/in/shreyas-sinha-appcair" target="_blank">LinkedIn</a>
+            </div>
+        </footer>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
