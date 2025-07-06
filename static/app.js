@@ -222,12 +222,19 @@ function timeUp() {
 function nextTrial() {
     if (trialNum % BLOCK_SIZE === 0 && trialNum !== 0) {
         let blockNum = Math.floor(trialNum / BLOCK_SIZE) + 1;
-        infoLabel.innerHTML = `<b>You have leveled up!!! Level ${blockNum} begins</b>`;
+        // --- BEGIN: Level Up Announcement ---
+        infoLabel.innerHTML = `<div style="background:linear-gradient(90deg,#ffe066,#ff7f50,#43e97b,#38f9d7); 
+            color:#222; font-size:2.1rem; font-weight:bold; padding:24px 12px; border-radius:16px;
+            margin:16px 0; box-shadow:0 0 16px #f9e79f;">
+            <span style="font-size:2.4rem; margin-right:12px;">🏆✨</span>
+            LEVEL UP!<br>Level <span style="color:#126e36">${blockNum}</span> begins!
+            <span style="font-size:2.4rem; margin-left:12px;">🚀🌈</span>
+            </div>`;
         setTimeout(() => {
             infoLabel.innerText = "Choose a deck to draw a card.";
             updateLabels();
             _afterLevelUpNextTrial();
-        }, 2000);
+        }, 2200);  // 2.2 seconds for dramatic pause
         return;
     }
     _afterLevelUpNextTrial();
